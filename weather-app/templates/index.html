@@ -1,0 +1,1125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Weather App</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+    body {
+    background-color:#404040;
+    background-size: cover;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    margin: 0;
+    overflow : auto;
+}
+
+#main-container {
+    display: flex;
+    width: 100%;
+    height: 100%;
+    margin: 0 auto;
+}
+
+#left-side, #right-side {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+}
+
+#input-card {
+    width: 300px; /* Set the width for a medium square */
+    height: auto; /* Modified to auto to accommodate virtual keyboard */
+    margin: 0 auto; /* Center it horizontally (if needed) */
+    display: flex; /* Center content vertically and horizontally */
+    flex-direction: column; /* Ensure elements are stacked vertically */
+    justify-content: center; /* Center content vertically */
+    align-items: center; /* Center content horizontally */
+}
+
+.card {
+    background: rgba(255, 255, 255, 0.3);
+    padding: 20px;
+    border-radius: 15px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    text-align: center;
+    margin-bottom: 20px;
+    width: 80%;
+}
+
+h2, h3,p {
+    color: black;
+    margin: 8px 0;
+}
+label{
+    color:red;
+    display:bock;
+    text-align:center;
+}
+input {
+    width: calc(100% - 16px);
+    padding: 10px;
+    box-sizing: border-box;
+    border-radius: 10px;
+    border: 1px solid black;
+    margin-top: 30px;
+}
+
+button {
+    background: #395461;
+    color: black;
+    padding: 10px;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    margin-top: 20px;
+    width: 100px;
+    font-size: 15px;
+}
+
+button:hover {
+    background: rgb(11,30,45);
+}
+
+#temp-div p {
+    font-size: 50px;
+    margin-top: 10px;
+}
+
+#weather-info {
+    font-size: 15px;
+}
+
+#weather-icon {
+            font-size:50px;
+            max-width: 300px; /* Adjust size as needed */
+            height: auto;
+            display: block;
+            margin: 0 auto; /* Centers the image */
+            margin-bottom:5px;
+            
+        }
+
+#hourly-forecast {
+        display: flex;
+        overflow-x: auto;
+        padding: 10px;
+        gap: 15px;
+        flex-wrap: nowrap; /* Prevents wrapping but allows scrolling */
+        align-items: center; /* Centers icons */
+    }
+    
+
+.hourly-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    color: white;
+    min-width: 80px;
+}
+
+.hourly-item img {
+    width: 50px;
+    height: 50px;
+    margin: 5px 0;
+}
+
+#btns {
+    display: flex;
+    justify-content: space-around;
+    gap: 10px;
+}
+
+/* Daily forecast styling */
+#daily-forecast {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    max-height: 300px;
+    overflow-y: auto;
+}
+
+.daily-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 5px 10px;
+    background-color: rgba(255, 255, 255, 0.1);
+    border-radius: 8px;
+    color: white;
+}
+
+.daily-item img {
+    width: 30px;
+    height: 30px;
+}
+
+.temp-range {
+    display: flex;
+    flex-direction: column;
+    text-align: right;
+}
+
+.high {
+    color: #FF7E67;
+}
+
+.low {
+    color: #89CFF0;
+}
+
+/* Virtual keyboard styling */
+.virtual-keyboard {
+    width: 100%;
+    margin-top: 15px;
+    background-color: rgba(0, 0, 0, 0.3);
+    border-radius: 10px;
+    padding: 10px;
+    max-height: 200px;
+    overflow-y: auto;
+}
+
+.keyboard-row {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 5px;
+}
+
+.keyboard-key {
+    margin: 2px;
+    width: 30px;
+    height: 30px;
+    background-color: rgba(255, 255, 255, 0.2);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    border-radius: 5px;
+    color: white;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    padding: 0;
+}
+
+.keyboard-key:hover {
+    background-color: rgba(255, 255, 255, 0.4);
+}
+
+.space-key {
+    width: 100px;
+}
+
+.backspace-key {
+    width: 50px;
+}
+
+/* Voice search button */
+.search-container {
+    position: relative;
+    width: 100%;
+}
+
+#voice-search-btn {
+    position: absolute;
+    right: 5px;
+    top: 35px;
+    background: transparent;
+    border: none;
+    font-size: 18px;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0;
+    padding: 0;
+}
+
+#voice-search-btn:hover {
+    color: #89CFF0;
+}
+
+.pulse {
+    animation: pulse 1.5s infinite;
+    color: #FF7E67;
+}
+
+@keyframes pulse {
+    0% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.2);
+    }
+    100% {
+        transform: scale(1);
+    }
+}
+
+/* Language selection styling */
+#language-select {
+    width: 100%;
+    padding: 8px;
+    border-radius: 10px;
+    background-color:white;
+    color:blue;
+    border: none;
+    margin-top: 10px;
+    font-size: 14px;
+}
+
+/* Styling for 10-day forecast */
+#forecast-card {
+    background: rgba(255, 255, 255, 0.2);
+    padding: 15px;
+    border-radius: 10px;
+    width: 90%;
+    text-align: center;
+    color: white;
+}
+
+#daily-forecast {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    max-height: 300px;
+    overflow-y: auto;
+}
+
+.daily-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 5px 10px;
+    background-color: rgba(255, 255, 255, 0.1);
+    border-radius: 8px;
+    color: white;
+}
+
+.daily-item img {
+    width: 40px;
+    height: 40px;
+}
+
+/* Responsive Design */
+@media (max-width: 600px) {
+    .weather-icon {
+        max-width: 30px; /* Reduce size for small screens */
+    }
+    
+    #hourly-forecast {
+        gap: 10px; /* Reduce spacing */
+    }
+}</style>
+</head>
+<body onload="getDefaultWeather()">
+    <div id="main-container">
+        <div id="left-side">
+            <div id="input-card" class="card">
+                <h2>Weather App</h2>
+                <select id="language-select" onchange="changeLanguage()">
+                    <!-- Indian Languages -->
+                    <option value="en">English</option>
+                    <option value="hi">हिंदी (Hindi)</option>
+                    <option value="te">తెలుగు (Telugu)</option>
+                    <option value="ta">தமிழ் (Tamil)</option>
+                    <option value="ml">മലയാളം (Malayalam)</option>
+                    <option value="bn">বাংলা (Bengali)</option>
+                    <option value="gu">ગુજરાતી (Gujarati)</option>
+                    <option value="mr">मराठी (Marathi)</option>
+                    <!-- Foreign Languages -->
+                    <option value="es">Español (Spanish)</option>
+                    <option value="fr">Français (French)</option>
+                    <option value="de">Deutsch (German)</option>
+                    <option value="zh">中文 (Chinese)</option>
+                    <option value="ja">日本語 (Japanese)</option>
+                    <option value="ko">한국어 (Korean)</option>
+                </select>
+                <div class="search-container">
+                    <input type="text" id="city" placeholder="Enter city name">
+                    <button id="voice-search-btn" title="Voice Search" onclick="startVoiceSearch()">
+                        <i id="voice-icon" class="fas fa-microphone"></i>
+                    </button>
+                </div>
+                <div id="btns">
+                    <button id="get-weather-btn" onclick="getWeather()">Get Weather</button>
+                    <button id="current-location-btn" onclick="getWeatherByCurrentLocation()">Current Location</button>
+                </div>
+                <!-- Virtual keyboard will be inserted here dynamically -->
+            </div>
+        </div>
+        <div id="right-side">
+            <div id="weather-card" class="card">
+                <span id="weather-icon">☀️</span>
+                <div id="temp-div"></div>
+                <div id="weather-info"></div>
+            </div>
+            <div id="forecast-card" class="card">
+                <h3 id="hourly-forecast-title">24-Hour Forecast</h3>
+                <div id="hourly-forecast"></div>
+            </div>
+            <div id="daily-forecast-card" class="card">
+                <h3 id="forecast-title">6-Day Forecast</h3>
+                <div id="daily-forecast">
+               
+                    <div class="forecast-item" data-weather="rain" data-temp="22"></div>
+                    <div class="forecast-item" data-weather="thunderstorm" data-temp="19"></div>
+                </div>
+                
+            </div>
+
+        </div>
+    </div>
+    <script >const translations = {
+        en: {
+            appTitle: "Weather App",
+            enterCity: "Enter city name",
+            getWeather: "Get Weather",
+            currentLocation: "Current Location",
+            hourlyForecast: "3 Hour interval  Forecast",
+            dailyForecast: "06-Day Forecast",
+            feelsLike: "Feels like",
+            humidity: "Humidity",
+            wind: "Wind",
+            high: "High",
+            low: "Low",
+            precipitation: "Precipitation",
+            enterCityAlert: "Please enter a city name.",
+            cityNotFound: "City not found. Please try again.",
+            weatherError: "An error occurred while fetching weather data. Please try again.",
+            locationError: "Unable to get your location. Please enable location services.",
+            geoNotSupported: "Geolocation is not supported by your browser.",
+            voiceNotSupported: "Voice recognition is not supported by your browser.",
+            dailyForecastNotAvailable: "Daily forecast data is not available.",
+            forecastLimitNote: "Only {days} days of forecast data are available due to API limitations."
+            
+       
+        },
+        hi: {
+            days: ["रविवार", "सोमवार", "मंगलवार", "बुधवार", "गुरुवार", "शुक्रवार", "शनिवार"],
+            appTitle: "मौसम ऐप",
+            enterCity: "शहर का नाम दर्ज करें",
+            getWeather: "मौसम जानें",
+            currentLocation: "वर्तमान स्थान",
+            hourlyForecast: "आज का 3-घंटे का पूर्वानुमान",
+            dailyForecast: "06-दिन का पूर्वानुमान",
+            feelsLike: "महसूस होता है",
+            humidity: "नमी",
+            wind: "हवा",
+            high: "अधिकतम",
+            low: "न्यूनतम",
+            precipitation: "वर्षा की संभावना",
+            enterCityAlert: "कृपया शहर का नाम दर्ज करें।",
+            cityNotFound: "शहर नहीं मिला। कृपया पुनः प्रयास करें।",
+            weatherError: "मौसम डेटा प्राप्त करने में त्रुटि हुई। कृपया पुनः प्रयास करें।",
+            locationError: "आपका स्थान प्राप्त करने में असमर्थ। कृपया स्थान सेवाएं सक्षम करें।",
+            geoNotSupported: "आपके ब्राउज़र द्वारा जियोलोकेशन समर्थित नहीं है।",
+            voiceNotSupported: "आपके ब्राउज़र द्वारा आवाज़ पहचान समर्थित नहीं है।",
+            dailyForecastNotAvailable: "दैनिक पूर्वानुमान डेटा उपलब्ध नहीं है।",
+            forecastLimitNote: "एपीआई सीमाओं के कारण केवल {days} दिनों का पूर्वानुमान डेटा उपलब्ध है।"
+            
+       
+       
+        },
+        te: {
+            
+        
+        days: ['ఆదివారం', 'సోమవారం', 'మంగళవారం', 'బుధవారం', 'గురువారం', 'శుక్రవారం', 'శనివారం'],
+        appTitle: "వాతావరణ యాప్",
+        enterCity: "నగర పేరు నమోదు చేయండి",
+        getWeather: "వాతావరణం తెలుసుకోండి",
+        currentLocation: "ప్రస్తుత స్థానం",
+        hourlyForecast: "నేటి 3-గంటల వారీ అంచనా",
+        dailyForecast: "06-రోజుల సూచన",
+        feelsLike: "అనిపిస్తుంది",
+        humidity: "తేమ",
+        wind: "గాలి",
+         high: "గరిష్టం",
+        low: "కనిష్టం",
+        precipitation: "వర్షపాతం",
+        enterCityAlert: "దయచేసి నగర పేరు నమోదు చేయండి।",
+        cityNotFound: "నగరం కనబడలేదు। దయచేసి మళ్లీ ప్రయత్నించండి।",
+         weatherError: "వాతావరణ డేటా సేకరణలో లోపం ఏర్పడింది। దయచేసి మళ్లీ ప్రయత్నించండి।",
+        locationError: "మీ స్థానాన్ని పొందలేకపోయాము। దయచేసి స్థాన సేవలను సక్రియం చేయండి।",
+        geoNotSupported: "మీ బ్రౌజర్ జియోలొకేషన్‌కు మద్దతు ఇవ్వదు।",
+        voiceNotSupported: "మీ బ్రౌజర్ వాయిస్ రికగ్నిషన్‌కు మద్దతు ఇవ్వదు।",
+         dailyForecastNotAvailable: "రోజువారీ సూచన డేటా అందుబాటులో లేదు।",
+        forecastLimitNote: "API పరిమితుల కారణంగా కేవలం {days} రోజుల సూచన డేటా మాత్రమే అందుబాటులో ఉంది।"
+         
+    
+    },
+        ta: {
+            days: ["ஞாயிறு", "திங்கள்", "செவ்வாய்", "புதன்", "வியாழன்", "வெள்ளி", "சனி"],
+            appTitle: "வானிலை பயன்பாடு",
+            enterCity: "நகரத்தின் பெயரை உள்ளிடவும்",
+            getWeather: "வானிலை அறியவும்",
+            currentLocation: "தற்போதைய இடம்",
+            hourlyForecast: "இன்றைய 3 மணி நேர முன்னறிவிப்பு",
+            dailyForecast: "06-நாள் முன்னறிவிப்பு",
+            feelsLike: "உணரப்படுவது",
+            humidity: "சமச்சீர்",
+            wind: "காற்று",
+            high: "அதிகபட்சம்",
+            low: "குறைந்தபட்சம்",
+            precipitation: "மழை",
+            enterCityAlert: "தயவு செய்து நகரத்தின் பெயரை உள்ளிடவும்।",
+            cityNotFound: "நகரம் கிடைக்கவில்லை। மீண்டும் முயற்சிக்கவும்।",
+            weatherError: "வானிலை தரவு பெறுவதில் பிழை ஏற்பட்டது। மீண்டும் முயற்சிக்கவும்।",
+            locationError: "உங்கள் இருப்பிடத்தைப் பெற முடியவில்லை। இருப்பிட சேவைகளை இயக்கவும்।",
+            geoNotSupported: "உங்கள் உலாவியால் ஜியோலொகேஷன் ஆதரிக்கப்படவில்லை।",
+            voiceNotSupported: "உங்கள் உலாவியால் குரல் அடையாளம் ஆதரிக்கப்படவில்லை।",
+            dailyForecastNotAvailable: "தினசரி முன்னறிவிப்பு தரவு கிடைக்கவில்லை।",
+            forecastLimitNote: "API வரம்புகளின் காரணமாக {days} நாட்களுக்கு மட்டுமே முன்னறிவிப்பு தரவு கிடைக்கிறது।"
+        },
+        ml: {
+            days: ["ഞായർ", "തിങ്കൾ", "ചൊവ്വ", "ബുധൻ", "വ്യാഴം", "വെള്ളി", "ശനി"],
+            appTitle: "വാതാവരൻ ആപ്പ്",
+            enterCity: "നഗരത്തിന്റെ പേര് നൽകുക",
+            getWeather: "വാതാവരം അറിയുക",
+            currentLocation: "നിലവിലെ സ്ഥലം",
+            hourlyForecast: "ഇന്നത്തെ 3 മണിക്കൂറുകളിലെ പ്രവചനം",
+            dailyForecast: "06-ദിവസം പ്രവചനം",
+            feelsLike: "അനുഭവപ്പെടുന്നത്",
+            humidity: "ആർദ്രത",
+            wind: "കാറ്റ്",
+            high: "ഉയർന്നത്",
+            low: "കുറഞ്ഞത്",
+            precipitation: "മഴ",
+            enterCityAlert: "ദയവായി നഗരത്തിന്റെ പേര് നൽകുക।",
+            cityNotFound: "നഗരം കണ്ടെത്തിയില്ല। ദയവായി വീണ്ടും ശ്രമിക്കുക।",
+            weatherError: "വാതാവരണ ഡാറ്റ ലഭിക്കുന്നതിൽ പിശക് സംഭവിച്ചു। ദയവായി വീണ്ടും ശ്രമിക്കുക।",
+            locationError: "നിന്റെ സ്ഥലം ലഭിക്കാൻ കഴിയില്ല। ദയവായി സ്ഥല സേവനങ്ങൾ പ്രവർത്തനക്ഷമമാക്കുക।",
+            geoNotSupported: "നിന്റെ ബ്രൗസർ ജിയോലൊക്കേഷനെ പിന്തുണയ്ക്കുന്നില്ല।",
+            voiceNotSupported: "നിന്റെ ബ്രൗസർ ശബ്ദ തിരിച്ചറിയലിനെ പിന്തുണയ്ക്കുന്നिल്ല।",
+            dailyForecastNotAvailable: "ദൈനംദിന പ്രവചന ഡാറ്റ ലഭ്യമല്ല।",
+            forecastLimitNote: "API പരിമിതികൾ കാരണം {days} ദിവസങ്ങളുടെ പ്രവചന ഡാറ്റ മാത്രമേ ലഭ്യമാകൂ।"
+        },
+        bn: {
+            days: ["রবিবার", "সোমবার", "মঙ্গলবার", "বুধবার", "বৃহস্পতিবার", "শুক্রবার", "শনিবার"],
+            appTitle: "আবহাওয়া অ্যাপ",
+            enterCity: "শহরের নাম লিখুন",
+            getWeather: "আবহাওয়া জানুন",
+            currentLocation: "বর্তমান অবস্থান",
+            hourlyForecast: "আজকের ৩-ঘণ্টার পূর্বাভাস",
+            dailyForecast: "০৬ দিনের পূর্বাভাস",
+            feelsLike: "অনুভূত হয়",
+            humidity: "আর্দ্রতা",
+            wind: "হাওয়া",
+            high: "সর্বোচ্চ",
+            low: "সর্বনিম্ন",
+            precipitation: "বৃষ্টিপাত",
+            enterCityAlert: "দয়া করে শহরের নাম লিখুন।",
+            cityNotFound: "শহর পাওয়া যায়নি। দয়া করে আবার চেষ্টা করুন।",
+            weatherError: "আবহাওয়া ডেটা আনতে ত্রুটি হয়েছে। দয়া করে আবার চেষ্টা করুন।",
+            locationError: "আপনার অবস্থান পেতে অক্ষম। দয়া করে অবস্থান পরিষেবাগুলি সক্রিয় করুন।",
+            geoNotSupported: "আপনার ব্রাউজার জিওলোকেশন সমর্থন করে না।",
+            voiceNotSupported: "আপনার ব্রাউজার ভয়েস রেকগনিশন সমর্থন করে না।",
+            dailyForecastNotAvailable: "দৈনিক পূর্বাভাস ডেটা উপলব্ধ নয়।",
+            forecastLimitNote: "API সীমাবদ্ধতার কারণে শুধুমাত্র {days} দিনের পূর্বাভাস ডেটা উপলব্ধ।"
+        },
+        gu: {
+            days: ["રવિવાર", "સોમવાર", "મંગળવાર", "બુધવાર", "ગુરુવાર", "શુક્રવાર", "શનિવાર"],
+            appTitle: "મૌસમ એપ",
+            enterCity: "શહેરનું નામ દાખલ કરો",
+            getWeather: "મૌસમ જાણો",
+            currentLocation: "વર્તમાન સ્થાન",
+            hourlyForecast: "આજનું 3-કલાકનું માહીતી",
+            dailyForecast: "06-દિવસની આગાહી",
+            feelsLike: "એવું લાગે છે",
+            humidity: "આર્દ્રતા",
+            wind: "પવન",
+            high: "સુતમ",
+            low: "ન્યૂનતમ",
+            precipitation: "વર્ષા",
+            enterCityAlert: "કૃપા કરીને શહેરનું નામ દાખલ કરો।",
+            cityNotFound: "શહેર મળ્યું નથી। કૃપા કરીને ફરીથી પ્રયાસ કરો।",
+            weatherError: "મૌસમ ડેટા મેળવવામાં ભૂલ થઈ। કૃપા કરીને ફરીથી પ્રયાસ કરો।",
+            locationError: "તમારું સ્થાન મેળવવામાં અસમર્થ। કૃપા કરીને સ્થાન સેવાઓ સક્રિય કરો।",
+            geoNotSupported: "તમારું બ્રાઉઝર જિયોલોકેશનને સપોર્ટ કરતું નથી।",
+            voiceNotSupported: "તમારું બ્રાઉઝર વૉઇસ રેકગ્નિશનને સપોર્ટ કરતું નથી।",
+            dailyForecastNotAvailable: "દૈનિક આગાહી ડેટા ઉપલબ્ધ નથી।",
+            forecastLimitNote: "API મર્યાદાઓના કારણે ફક્ત {days} દિવસનો આગાહી ડેટા ઉપલબ્ધ છે।"
+        },
+        mr: {
+            days: ["रविवार", "सोमवार", "मंगळवार", "बुधवार", "गुरुवार", "शुक्रवार", "शनिवार"],
+            appTitle: "हवामान अॅप",
+            enterCity: "शहराचे नाव प्रविष्ट करा",
+            getWeather: "हवामान जाणून घ्या",
+            currentLocation: "सध्याचे स्थान",
+            hourlyForecast: "आजच्या 3-तासगणिक अंदाज",
+            dailyForecast: "06-दिवसांचा अंदाज",
+            feelsLike: "असं वाटतंय",
+            humidity: "आर्द्रता",
+            wind: "वारा",
+            high: "कमाल",
+            low: "किमान",
+            precipitation: "पर्जन्यमान",
+            enterCityAlert: "कृपया शहराचे नाव प्रविष्ट करा।",
+            cityNotFound: "शहर सापडले नाही। कृपया पुन्हा प्रयत्न करा।",
+            weatherError: "हवामान डेटा मिळवण्यात त्रुटी आली। कृपया पुन्हा प्रयत्न करा।",
+            locationError: "तुमचे स्थान मिळवण्यात अक्षम। कृपया स्थान सेवा सक्रिय करा।",
+            geoNotSupported: "तुमचा ब्राउझर जिओलोकेशनला समर्थन देत नाही।",
+            voiceNotSupported: "तुमचा ब्राउझर आवाज ओळखण्याला समर्थन देत नाही।",
+            dailyForecastNotAvailable: "दैनिक अंदाज डेटा उपलब्ध नाही।",
+            forecastLimitNote: "API मर्यादांमुळे फक्त {days} दिवसांचा अंदाज डेटा उपलब्ध आहे।"
+        },
+        es: {
+            days: ["Domingo", "Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado"],
+            appTitle: "Aplicación del Clima",
+            enterCity: "Ingrese el nombre de la ciudad",
+            getWeather: "Obtener el clima",
+            currentLocation: "Ubicación actual",
+            hourlyForecast: "Pronóstico de cada 3 horas de hoy",
+            dailyForecast: "Pronóstico de 06 días",
+            feelsLike: "Se siente como",
+            humidity: "Humedad",
+            wind: "Viento",
+            high: "Máxima",
+            low: "Mínima",
+            precipitation: "Precipitación",
+            enterCityAlert: "Por favor, ingrese el nombre de una ciudad.",
+            cityNotFound: "Ciudad no encontrada. Por favor, intenta de nuevo.",
+            weatherError: "Ocurrió un error al obtener los datos del clima. Por favor, intenta de nuevo.",
+            locationError: "No se pudo obtener tu ubicación. Por favor, activa los servicios de ubicación.",
+            geoNotSupported: "La geolocalización no es soportada por tu navegador.",
+            voiceNotSupported: "El reconocimiento de voz no es soportado por tu navegador.",
+            dailyForecastNotAvailable: "Los datos de pronóstico diario no están disponibles.",
+            forecastLimitNote: "Debido a limitaciones de la API, solo están disponibles datos de pronóstico para {days} días."
+        },
+        fr: {
+            days: ["Dimanche", "Lundi", "Mardi", "Mercredi", "Jeudi", "Vendredi", "Samedi"],
+            appTitle: "Application Météo",
+            enterCity: "Entrez le nom de la ville",
+            getWeather: "Obtenir la météo",
+            currentLocation: "Emplacement actuel",
+            hourlyForecast: " Prévisions toutes les 3 heures d'aujourd'hui",
+            dailyForecast: "Prévisions sur 06 jours",
+            feelsLike: "Ressenti",
+            humidity: "Humidité",
+            wind: "Vent",
+            high: "Maximum",
+            low: "Minimum",
+            precipitation: "Précipitation",
+            enterCityAlert: "Veuillez entrer le nom d'une ville.",
+            cityNotFound: "Ville non trouvée. Veuillez réessayer.",
+            weatherError: "Une erreur s'est produite lors de la récupération des données météo. Veuillez réessayer.",
+            locationError: "Impossible d'obtenir votre emplacement. Veuillez activer les services de localisation.",
+            geoNotSupported: "La géolocalisation n'est pas prise en charge par votre navigateur.",
+            voiceNotSupported: "La reconnaissance vocale n'est pas prise en charge par votre navigateur.",
+            dailyForecastNotAvailable: "Les données de prévision quotidienne ne sont pas disponibles.",
+            forecastLimitNote: "En raison des limitations de l'API, seules les données de prévision pour {days} jours sont disponibles."
+        },
+        de: {
+            days: ["Sonntag", "Montag", "Dienstag", "Mittwoch", "Donnerstag", "Freitag", "Samstag"],
+            appTitle: "Wetter-App",
+            enterCity: "Stadtname eingeben",
+            getWeather: "Wetter abrufen",
+            currentLocation: "Aktueller Standort",
+            hourlyForecast: "3-stündliche Vorhersage für heute",
+            dailyForecast: "06-Tage-Vorhersage",
+            feelsLike: "Gefühlt wie",
+            humidity: "Luftfeuchtigkeit",
+            wind: "Wind",
+            high: "Höchst",
+            low: "Tiefst",
+            precipitation: "Niederschlag",
+            enterCityAlert: "Bitte geben Sie einen Stadtnamen ein.",
+            cityNotFound: "Stadt nicht gefunden. Bitte versuchen Sie es erneut.",
+            weatherError: "Ein Fehler ist beim Abrufen der Wetterdaten aufgetreten. Bitte versuchen Sie es erneut.",
+            locationError: "Ihr Standort konnte nicht ermittelt werden. Bitte aktivieren Sie die Standortdienste.",
+            geoNotSupported: "Geolokalisierung wird von Ihrem Browser nicht unterstützt.",
+            voiceNotSupported: "Spracherkennung wird von Ihrem Browser nicht unterstützt.",
+            dailyForecastNotAvailable: "Tägliche Vorhersagedaten sind nicht verfügbar.",
+            forecastLimitNote: "Aufgrund von API-Beschränkungen sind nur Vorhersagedaten für {days} Tage verfügbar."
+        },
+        zh: {
+            days: ["星期日", "星期一", "星期二", "星期三", "星期四", "星期五", "星期六"],
+            appTitle: "天气应用",
+            enterCity: "输入城市名称",
+            getWeather: "获取天气",
+            currentLocation: "当前位置",
+            hourlyForecast: "今天的3小时预报",
+            dailyForecast: "06天天气预报",
+            feelsLike: "体感",
+            humidity: "湿度",
+            wind: "风",
+            high: "最高",
+            low: "最低",
+            precipitation: "降水量",
+            enterCityAlert: "请输入城市名称。",
+            cityNotFound: "未找到城市。请重试。",
+            weatherError: "获取天气数据时出错。请重试。",
+            locationError: "无法获取您的位置。请启用定位服务。",
+            geoNotSupported: "您的浏览器不支持地理定位。",
+            voiceNotSupported: "您的浏览器不支持语音识别。",
+            dailyForecastNotAvailable: "每日预报数据不可用。",
+            forecastLimitNote: "由于API限制，仅提供{days}天的预报数据。"
+        },
+        ja: {
+            days: ["日曜日", "月曜日", "火曜日", "水曜日", "木曜日", "金曜日", "土曜日"],
+            appTitle: "天気アプリ",
+            enterCity: "都市名を入力",
+            getWeather: "天気を確認",
+            currentLocation: "現在地",
+            hourlyForecast: "今日の3時間ごとの予報",
+            dailyForecast: "06日間の予報",
+            feelsLike: "体感温度",
+            humidity: "湿度",
+            wind: "風",
+            high: "最高",
+            low: "最低",
+            precipitation: "降水量",
+            enterCityAlert: "都市名を入力してください。",
+            cityNotFound: "都市が見つかりません。もう一度お試しください。",
+            weatherError: "天気データの取得中にエラーが発生しました。もう一度お試しください。",
+            locationError: "現在地を取得できません。位置情報サービスを有効にしてください。",
+            geoNotSupported: "お使いのブラウザは地理位置情報をサポートしていません。",
+            voiceNotSupported: "お使いのブラウザは音声認識をサポートしていません。",
+            dailyForecastNotAvailable: "日次予報データは利用できません。",
+            forecastLimitNote: "APIの制限により、{days}日間の予報データのみが利用可能です。"
+        },
+        ko: {
+            days: ["일요일", "월요일", "화요일", "수요일", "목요일", "금요일", "토요일"],
+            appTitle: "날씨 앱",
+            enterCity: "도시 이름을 입력하세요",
+            getWeather: "날씨 확인",
+            currentLocation: "현재 위치",
+            hourlyForecast: "오늘의 3시간 간격 예보",
+            dailyForecast: "06 일 예보",
+            feelsLike: "체감 온도",
+            humidity: "습도",
+            wind: "바람",
+            high: "최고",
+            low: "최저",
+            precipitation: "강수량",
+            enterCityAlert: "도시 이름을 입력해 주세요.",
+            cityNotFound: "도시를 찾을 수 없습니다. 다시 시도해 주세요.",
+            weatherError: "날씨 데이터를 가져오는 중 오류가 발생했습니다. 다시 시도해 주세요.",
+            locationError: "위치를 가져올 수 없습니다. 위치 서비스를 활성화해 주세요.",
+            geoNotSupported: "브라우저가 지리적 위치를 지원하지 않습니다.",
+            voiceNotSupported: "브라우저가 음성 인식을 지원하지 않습니다.",
+            dailyForecastNotAvailable: "일일 예보 데이터가 제공되지 않습니다.",
+            forecastLimitNote: "API 제한으로 인해 {days}일의 예보 데이터만 제공됩니다."
+        }
+    };
+    </script>
+    <script>const OPENWEATHERMAP_API_KEY = '4495bce352fee4102d92010b47e5484a';
+
+        function getWeather() {
+            const city = document.getElementById('city').value;
+        
+            if (!city) {
+                alert(translations[currentLanguage].enterCityAlert);
+                return;
+            }
+        
+            // Fetch current weather data with language support
+            fetch(`https://api.openweathermap.org/data/2.5/weather?q=${encodeURIComponent(city)}&appid=${OPENWEATHERMAP_API_KEY}&lang=${currentLanguage}`)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('City not found');
+                    }
+                    return response.json();
+                })
+                .then(currentData => {
+                    displayWeather(currentData);
+        
+                    const lat = currentData.coord.lat;
+                    const lon = currentData.coord.lon;
+        
+                    // Fetch hourly and daily forecast data with language support
+                    return fetch(`https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&appid=${OPENWEATHERMAP_API_KEY}&lang=${currentLanguage}`);
+                })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Forecast data not available');
+                    }
+                    return response.json();
+                })
+                .then(forecastData => {
+                    displayHourlyForecast(forecastData.list);
+                    const dailyData = aggregateDailyData(forecastData.list);
+                    displayDailyForecast(dailyData);
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert(error.message === 'City not found' ? translations[currentLanguage].cityNotFound : translations[currentLanguage].weatherError);
+                });
+        }
+        
+        function getDefaultWeather() {
+            const defaultCity = 'Vizianagaram';
+            document.getElementById('city').value = defaultCity;
+            getWeather();
+        }
+        
+        function getWeatherByCurrentLocation() {
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(
+                    position => {
+                        const lat = position.coords.latitude;
+                        const lon = position.coords.longitude;
+        
+                        // Fetch current weather data with language support
+                        fetch(`https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${OPENWEATHERMAP_API_KEY}&lang=${currentLanguage}`)
+                            .then(response => {
+                                if (!response.ok) {
+                                    throw new Error('Weather data not available');
+                                }
+                                return response.json();
+                            })
+                            .then(currentData => {
+                                displayWeather(currentData);
+                                document.getElementById('city').value = currentData.name;
+        
+                                // Fetch forecast data with language support
+                                return fetch(`https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&appid=${OPENWEATHERMAP_API_KEY}&lang=${currentLanguage}`);
+                            })
+                            .then(response => {
+                                if (!response.ok) {
+                                    throw new Error('Forecast data not available');
+                                }
+                                return response.json();
+                            })
+                            .then(forecastData => {
+                                displayHourlyForecast(forecastData.list);
+                                const dailyData = aggregateDailyData(forecastData.list);
+                                displayDailyForecast(dailyData);
+                            })
+                            .catch(error => {
+                                console.error('Error:', error);
+                                alert(translations[currentLanguage].weatherError);
+                            });
+                    },
+                    error => {
+                        console.error('Error:', error);
+                        alert(translations[currentLanguage].locationError);
+                    }
+                );
+            } else {
+                alert(translations[currentLanguage].geoNotSupported);
+            }
+        }
+        
+        function getWeatherIcon(description) {
+            const weatherIcons = {
+                "clear sky": "☀️",
+                "few clouds": "🌤️",
+                "scattered clouds": "⛅",
+                "broken clouds": "☁️",
+                "shower rain": "🌧️",
+                "rain": "🌦️",
+                "thunderstorm": "⛈️",
+                "snow": "❄️",
+                "mist": "🌫️"
+            };
+            return weatherIcons[description.toLowerCase()] || "☀️";
+        }
+        
+        function displayWeather(data) {
+            const tempDivInfo = document.getElementById('temp-div');
+            const weatherInfoDiv = document.getElementById('weather-info');
+            const weatherIcon = document.getElementById('weather-icon');
+        
+            weatherInfoDiv.innerHTML = '';
+            tempDivInfo.innerHTML = '';
+            weatherIcon.innerHTML = '';
+        
+            const cityName = data.name;
+            const temperature = Math.round(data.main.temp - 273.15);
+            const description = data?.weather?.[0]?.description || "No description available";
+
+            const feelsLike = Math.round(data.main.feels_like - 273.15);
+            const humidity = data.main.humidity;
+            const windSpeed = data.wind.speed;
+        
+            const weatherEmoji = getWeatherIcon(description);
+        
+            weatherIcon.innerHTML = `${weatherEmoji}`;
+            const temperatureHTML = `<p>${temperature}°C</p>`;
+            const weatherHtml = `
+    <p>${translations[currentLanguage].cityName || "City Name"}: ${cityName}</p>
+    <p>${translations[currentLanguage].description || "Description"}: ${description}</p>
+    <p>${translations[currentLanguage].feelsLike}: ${feelsLike}°C</p>
+    <p>${translations[currentLanguage].humidity}: ${humidity}%</p>
+    <p>${translations[currentLanguage].wind}: ${windSpeed} m/s</p>
+`;
+        
+            tempDivInfo.innerHTML = temperatureHTML;
+            weatherInfoDiv.innerHTML = weatherHtml;
+        }
+        
+        function displayHourlyForecast(hourlyData) {
+            const hourlyForecastDiv = document.getElementById('hourly-forecast');
+            hourlyForecastDiv.innerHTML = '';
+        
+            const next24Hours = hourlyData.slice(0, 12);
+        
+            next24Hours.forEach(item => {
+                const dateTime = new Date(item.dt * 1000);
+                const hour = dateTime.getHours();
+                const temperature = Math.round(item.main.temp - 273.15);
+                const iconCode = item.weather[0].icon;
+                const iconUrl = `https://openweathermap.org/img/wn/${iconCode}.png`;
+        
+                const hourlyItemHtml = `
+                    <div class="hourly-item">
+                        <span>${hour}:00</span>
+                        <img src="${iconUrl}" alt="Hourly Weather Icon">
+                        <span>${temperature}°C</span>
+                    </div>
+                `;
+        
+                hourlyForecastDiv.innerHTML += hourlyItemHtml;
+            });
+        }
+        
+        function aggregateDailyData(hourlyData) {
+            const dailyData = [];
+            const days = {};
+        
+            hourlyData.forEach(item => {
+                const date = new Date(item.dt * 1000);
+                const day = date.toLocaleDateString();
+        
+                if (!days[day]) {
+                    days[day] = {
+                        dt: item.dt,
+                        temp: { max: item.main.temp, min: item.main.temp },
+                        weather: item.weather,
+                        pop: item.pop
+                    };
+                } else {
+                    days[day].temp.max = Math.max(days[day].temp.max, item.main.temp);
+                    days[day].temp.min = Math.min(days[day].temp.min, item.main.temp);
+                    days[day].pop = Math.max(days[day].pop, item.pop);
+                }
+            });
+        
+            for (const day in days) {
+                dailyData.push(days[day]);
+            }
+        
+            return dailyData.slice(0, 6); // Limit to 6 days as per your translations
+        }
+        
+        function displayDailyForecast(dailyData) {
+            const dailyForecastDiv = document.getElementById('daily-forecast');
+            dailyForecastDiv.innerHTML = '';
+        
+            const next6Days = dailyData.slice(0, 6);
+        
+            next6Days.forEach(item => {
+                const date = new Date(item.dt * 1000);
+                const dayName = getDayName(date);
+                const maxTemp = Math.round(item.temp.max - 273.15);
+                const minTemp = Math.round(item.temp.min - 273.15);
+                const iconCode = item.weather[0].icon;
+                const iconUrl = `https://openweathermap.org/img/wn/${iconCode}.png`;
+                const precipitation = item.pop * 100;
+                const description = item.weather[0].description;
+        
+                const dailyItemHtml = `
+                    <div class="daily-item">
+                        <span>${dayName} (${date.toLocaleDateString()})</span>
+                        <img src="${iconUrl}" alt="${description}">
+                        <div class="temp-range">
+                            <span class="high">${translations[currentLanguage].high}: ${maxTemp}°C</span>
+                            <span class="low">${translations[currentLanguage].low}: ${minTemp}°C</span>
+                        </div>
+                        <span>${translations[currentLanguage].precipitation}: ${precipitation.toFixed(0)}%</span>
+                        <span>${description}</span>
+                    </div>
+                `;
+        
+                dailyForecastDiv.innerHTML += dailyItemHtml;
+            });
+        
+            if (next6Days.length < 6) {
+                dailyForecastDiv.innerHTML += `
+                    <p style="text-align: center; color: #666;">
+                        ${translations[currentLanguage].forecastLimitNote.replace('{days}', next6Days.length)}
+                    </p>
+                `;
+            }
+        }
+        
+        function getDayName(date) {
+            const days = translations[currentLanguage].days || ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+            return days[date.getDay()];
+        }
+        
+        function startVoiceSearch() {
+            if (!('webkitSpeechRecognition' in window)) {
+                alert(translations[currentLanguage].voiceNotSupported);
+                return;
+            }
+        
+            const recognition = new webkitSpeechRecognition();
+            recognition.lang = getRecognitionLanguage(currentLanguage);
+            recognition.continuous = false;
+            recognition.interimResults = false;
+        
+            recognition.onstart = function() {
+                document.getElementById('voice-search-btn').classList.add('listening');
+                document.getElementById('voice-icon')?.classList.add('pulse');
+            };
+        
+            recognition.onresult = function(event) {
+                const transcript = event.results[0][0].transcript;
+                document.getElementById('city').value = transcript;
+                getWeather();
+            };
+        
+            recognition.onerror = function(event) {
+                console.error('Speech recognition error', event.error);
+                document.getElementById('voice-search-btn').classList.remove('listening');
+                document.getElementById('voice-icon')?.classList.remove('pulse');
+            };
+        
+            recognition.onend = function() {
+                document.getElementById('voice-search-btn').classList.remove('listening');
+                document.getElementById('voice-icon')?.classList.remove('pulse');
+            };
+        
+            recognition.start();
+        }
+        
+        function getRecognitionLanguage(langCode) {
+            const langMap = {
+                'en': 'en-US',
+                'hi': 'hi-IN',
+                'te': 'te-IN',
+                'ta': 'ta-IN',
+                'ml': 'ml-IN',
+                'bn': 'bn-IN',
+                'gu': 'gu-IN',
+                'mr': 'mr-IN',
+                'es': 'es-ES',
+                'fr': 'fr-FR',
+                'de': 'de-DE',
+                'zh': 'zh-CN',
+                'ja': 'ja-JP',
+                'ko': 'ko-KR'
+            };
+            return langMap[langCode] || 'en-US';
+        }
+        
+        let currentLanguage = 'en';
+        
+        function changeLanguage() {
+    currentLanguage = document.getElementById('language-select').value;
+    updateUILanguage();
+    setupVirtualKeyboard();
+    // Always refresh weather data, fallback to default if no city
+    const city = document.getElementById('city').value || 'Vizianagaram';
+    document.getElementById('city').value = city; // Set default if empty
+    getWeather();
+}
+        
+        function updateUILanguage() {
+            document.getElementById('get-weather-btn').innerText = translations[currentLanguage].getWeather;
+            document.getElementById('current-location-btn').innerText = translations[currentLanguage].currentLocation;
+            document.getElementById('city').placeholder = translations[currentLanguage].enterCity;
+            document.querySelector('#input-card h2').innerText = translations[currentLanguage].appTitle;
+            document.querySelector('#hourly-forecast-title').innerText = translations[currentLanguage].hourlyForecast;
+            document.getElementById('forecast-title').innerText = translations[currentLanguage].dailyForecast;
+            document.getElementById('voice-search-btn').title = translations[currentLanguage].voiceSearch;
+        }
+        
+        // Virtual Keyboard Functions (unchanged)
+        function setupVirtualKeyboard() {
+            if (document.getElementById('virtual-keyboard')) {
+                document.getElementById('virtual-keyboard').remove();
+            }
+        
+            const nonLatinLanguages = ['hi', 'te', 'ta', 'ml', 'bn', 'gu', 'mr', 'zh', 'ja', 'ko'];
+            if (nonLatinLanguages.includes(currentLanguage)) {
+                createVirtualKeyboard();
+            }
+        }
+        
+        function createVirtualKeyboard() {
+            const keyboardLayout = getKeyboardLayout(currentLanguage);
+        
+            const keyboardDiv = document.createElement('div');
+            keyboardDiv.id = 'virtual-keyboard';
+            keyboardDiv.className = 'virtual-keyboard';
+        
+            keyboardLayout.forEach(row => {
+                const rowDiv = document.createElement('div');
+                rowDiv.className = 'keyboard-row';
+        
+                row.forEach(key => {
+                    const keyButton = document.createElement('button');
+                    keyButton.className = 'keyboard-key';
+                    keyButton.innerText = key;
+                    keyButton.onclick = function() {
+                        const cityInput = document.getElementById('city');
+                        cityInput.value += key;
+                        cityInput.focus();
+                    };
+                    rowDiv.appendChild(keyButton);
+                });
+        
+                keyboardDiv.appendChild(rowDiv);
+            });
+        
+            const controlRow = document.createElement('div');
+            controlRow.className = 'keyboard-row';
+        
+            const spaceButton = document.createElement('button');
+            spaceButton.className = 'keyboard-key space-key';
+            spaceButton.innerText = translations[currentLanguage].space || 'Space';
+            spaceButton.onclick = function() {
+                const cityInput = document.getElementById('city');
+                cityInput.value += ' ';
+                cityInput.focus();
+            };
+        
+            const backspaceButton = document.createElement('button');
+            backspaceButton.className = 'keyboard-key backspace-key';
+            backspaceButton.innerText = '⌫';
+            backspaceButton.onclick = function() {
+                const cityInput = document.getElementById('city');
+                cityInput.value = cityInput.value.slice(0, -1);
+                cityInput.focus();
+            };
+        
+            controlRow.appendChild(spaceButton);
+            controlRow.appendChild(backspaceButton);
+            keyboardDiv.appendChild(controlRow);
+        
+            const inputCard = document.getElementById('input-card');
+            inputCard.appendChild(keyboardDiv);
+        }
+        
+        function getKeyboardLayout(language) {
+            const layouts = {
+                hi: [['अ', 'आ', 'इ', 'ई', 'उ', 'ऊ', 'ए', 'ऐ', 'ओ', 'औ'], ['क', 'ख', 'ग', 'घ', 'ङ', 'च', 'छ', 'ज', 'झ', 'ञ'], ['ट', 'ठ', 'ड', 'ढ', 'ण', 'त', 'थ', 'द', 'ध', 'न'], ['प', 'फ', 'ब', 'भ', 'म', 'य', 'र', 'ल', 'व', 'श'], ['ष', 'स', 'ह', 'क्ष', 'त्र', 'ज्ञ', 'ं', 'ः', '़', '्']],
+                te: [['అ', 'ఆ', 'ఇ', 'ఈ', 'ఉ', 'ఊ', 'ఋ', 'ౠ', 'ఎ', 'ఏ'], ['క', 'ఖ', 'గ', 'ఘ', 'ఙ', 'చ', 'ఛ', 'జ', 'ఝ', 'ఞ'], ['ట', 'ఠ', 'డ', 'ఢ', 'ణ', 'త', 'థ', 'ద', 'ధ', 'న'], ['ప', 'ఫ', 'బ', 'భ', 'మ', 'య', 'ర', 'ల', 'వ', 'శ'], ['ష', 'స', 'హ', 'ళ', 'క్ష', 'ఱ', 'ం', 'ః', '్', '‌']],
+                ta: [['அ', 'ஆ', 'இ', 'ஈ', 'உ', 'ஊ', 'எ', 'ஏ', 'ஐ', 'ஒ'], ['க', 'ங', 'ச', 'ஜ', 'ஞ', 'ட', 'ண', 'த', 'ந', 'ன'], ['ப', 'ம', 'ய', 'ர', 'ற', 'ல', 'ள', 'ழ', 'வ', 'ஶ'], ['ஷ', 'ஸ', 'ஹ', 'ா', 'ி', 'ீ', 'ு', 'ூ', 'ெ', 'ே'], ['ை', 'ொ', 'ோ', 'ௌ', '்', 'ஃ', '௧', '௨', '௩', '௪']],
+                ml: [['അ', 'ആ', 'ഇ', 'ഈ', 'ഉ', 'ഊ', 'ഋ', 'എ', 'ഏ', 'ഐ'], ['ക', 'ഖ', 'ഗ', 'ഘ', 'ങ', 'ച', 'ഛ', 'ജ', 'ഝ', 'ഞ'], ['ട', 'ഠ', 'ഡ', 'ഢ', 'ണ', 'ത', 'ഥ', 'ദ', 'ധ', 'ന'], ['പ', 'ഫ', 'ബ', 'ഭ', 'മ', 'യ', 'ര', 'ല', 'വ', 'ശ'], ['ഷ', 'സ', 'ഹ', 'ള', 'ഴ', 'റ', 'ം', 'ഃ', '്', 'ർ']],
+                bn: [['অ', 'আ', 'ই', 'ঈ', 'উ', 'ঊ', 'ঋ', 'এ', 'ঐ', 'ও'], ['ক', 'খ', 'গ', 'ঘ', 'ঙ', 'চ', 'ছ', 'জ', 'ঝ', 'ঞ'], ['ট', 'ঠ', 'ড', 'ঢ', 'ণ', 'ত', 'থ', 'দ', 'ধ', 'ন'], ['প', 'ফ', 'ব', 'ভ', 'ম', 'য', 'র', 'ল', 'শ', 'ষ'], ['স', 'হ', 'ড়', 'ঢ়', 'য়', 'ৎ', 'ং', 'ঃ', 'ঁ', '্']],
+                default: [['q', 'w', 'e', 'r', 't', 'y', 'u', 'i', 'o', 'p'], ['a', 's', 'd', 'f', 'g', 'h', 'j', 'k', 'l'], ['z', 'x', 'c', 'v', 'b', 'n', 'm']]
+            };
+            return layouts[language] || layouts.default;
+        }
+        
+        // Initialize the app
+        document.addEventListener("DOMContentLoaded", function() {
+            currentLanguage = document.getElementById('language-select')?.value || 'en';
+            updateUILanguage();
+            getDefaultWeather();
+            // Remove the redundant fetchWeatherData() since getDefaultWeather() handles it
+        });</script>
+</body>
+</html>
